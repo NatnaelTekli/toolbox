@@ -1,43 +1,16 @@
+# this is the file used to deploy on Portainer
+# or other more permanent hosting solutions
+
 services:
-
-  # Building and testing environment
-  dev:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: ghcr.io/growlf/toolbox:latest
-    environment:
-      - TESTVAR=${TESTVAR:-app}
-    stdin_open: true
-    tty: true
-    command: ["/bin/zsh"]
+  myapp:
+    container_name: myapp_test
+    image: dockerstepbystep:latest
+    build: .
+    ports:
+      - "8081:8081"
     volumes:
-      - ${HOME}/.gitconfig:/home/ubuntu/.gitconfig
-      - ${HOME}/.ssh:/home/ubuntu/.ssh
-      - ${PWD}:/app
-      - /var/run/docker.sock:/var/run/docker.sock
-    network_mode: "host"
+      - "app_data:/var/app_data"
 
-  # Example container with DooD and host file/net access
-  app1:
-    image: ghcr.io/growlf/toolbox:latest
-    environment:
-      - TESTVAR=${TESTVAR:-app2}
-    stdin_open: true
-    tty: true
-    command: ["/bin/zsh"]
-    volumes:
-      - /:/host
-      - /var/run/docker.sock:/var/run/docker.sock
-    network_mode: "host"
-    
-    
-  # Example of running the same image with different intent
-  app2:
-    image: ghcr.io/growlf/toolbox:latest
-    environment:
-      - TESTVAR=${TESTVAR:-app2}
-    stdin_open: true
-    tty: true
-    command: ["/bin/bash"]
-    
+volumes:
+  app_data:
+  
